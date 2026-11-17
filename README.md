@@ -1,5 +1,8 @@
 # Repurposing a Lululemon MIRROR
 
+> [!WARNING]
+> **Experimental hardware hacking, for educational and research purposes.** This is an unofficial, community-supported project, not affiliated with or endorsed by lululemon. These notes document experiments on my own device, not a tested or universal installation guide. Following them can erase data, permanently damage your MIRROR, or leave it unbootable. Exposed mains-powered electronics also pose a risk of electric shock or injury. Proceed at your own risk, work only on hardware you own or are authorized to modify, disconnect mains power before working on the board, and verify your hardware and backups before making changes. No warranty or guarantee of recovery is provided.
+
 This is a journal of my experience getting [LemonadeMirror](https://github.com/ikiiftekhar2/lemonademirror), a Debian-based system, running on my MIRROR's original NXP i.MX8M Mini board. It covers USB boot, backups, camera troubleshooting, and my Chromium kiosk setup, including the experiments and dead ends along the way. Some steps and fixes are specific to my unit, so you may not need all of them for yours.
 
 Point your AI agent at this repository for context on what I tried, what worked, and the dead ends I ran into. It should give your agent a head start getting your own MIRROR up and running, but make sure it checks your hardware and verifies each step rather than assuming your unit is identical to mine.
@@ -86,6 +89,11 @@ Not checked here, needs a person: picture on the glass, sound by ear, button pre
 - `build/` — local, Git-ignored working files written by this project's scripts and `mise` tasks. These include downloaded LemonadeMirror release files and Linux sources, extracted boot components, compiled U-Boot and shim images, camera experiments, and generated configuration files. Some later tasks require specific paths and hashes here; do not assume the directory can be deleted without affecting those tasks.
 - `vendor/` — local, Git-ignored checkouts of third-party source, including LemonadeMirror, NXP U-Boot, and NXP imx-mkimage. These are inputs to the project's build and preparation scripts, not code maintained in this repository. The U-Boot build script clones its checkout if missing; other checkouts must be supplied separately. Scripts check or read these sources and generally write generated outputs to `build/`.
 - `pixi.toml` and `pixi.lock` — project-local UUU runtime libraries, installed into Git-ignored `.pixi/`.
+
+## License
+
+Original code and documentation in this repository are available under the [MIT License](LICENSE). Third-party material, including the reproduced shim source and patches to upstream projects, is excluded from that grant. See 
+[license scope and third-party notices](THIRD_PARTY_NOTICES.md) for details.
 
 ## Credits and resources
 
