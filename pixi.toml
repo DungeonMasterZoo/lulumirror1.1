@@ -1,0 +1,16 @@
+# Project-local libraries for NXP's macOS UUU binary. Its release was linked
+# against Homebrew paths, so the mise UUU task redirects the loader to these
+# ABI-compatible conda-forge libraries instead. See README.md for limitations.
+[workspace]
+name = "mirror-uuu-libraries"
+version = "0.1.0"
+channels = ["conda-forge"]
+platforms = ["osx-arm64"]
+
+[dependencies]
+tinyxml2 = "==11.0.0"
+libusb = ">=1.0.0,<2"
+openssl = ">=3,<4"
+zstd = ">=1.5,<2"
+make = "==4.4.1"
+sed = "==4.10"

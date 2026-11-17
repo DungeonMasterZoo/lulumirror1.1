@@ -1,0 +1,20 @@
+diff --git a/include/configs/imx8mm_evk.h b/include/configs/imx8mm_evk.h
+index 0f0c1b2f..8973ff85 100644
+--- a/include/configs/imx8mm_evk.h
++++ b/include/configs/imx8mm_evk.h
+@@ -167,6 +167,7 @@
+ 			"fi; " \
+ 		"fi;\0"
+ 
++#ifndef CONFIG_BOOTCOMMAND
+ #define CONFIG_BOOTCOMMAND \
+ 	   "mmc dev ${mmcdev}; if mmc rescan; then " \
+ 		   "if run loadbootscript; then " \
+@@ -179,6 +180,7 @@
+ 		   "fi; " \
+ 	   "fi;"
+ #endif
++#endif
+ 
+ /* Link Definitions */
+ #define CONFIG_LOADADDR			0x40480000
