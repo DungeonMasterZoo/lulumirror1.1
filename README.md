@@ -1,5 +1,5 @@
 # Repurposing a Lululemon MIRROR
-> [!WORK IN PROGRESS]
+> [!WARNING]
 > This project is ongoing. Until this notice is modified, this project is not expected to function.
 > [!WARNING]
 > This is hardware hacking. if you don't feel comfortable manually bridging pins on a circuit board, this isn't the project for you. This is open-source stuff, no implied or express warranty.
