@@ -23,13 +23,52 @@ Set up your docker environment with
 ```sh
 docker build . -t lulumirror
 ```
-## Acquiring reference images
+### Acquiring reference images
 Create a new folder called `reference-images`
 Then, download
-`reference-images/spl_0-60k.img` (Reference boot0 image used to extract ATF, TEE and the device tree, and for the boot0 comparison.)
-`reference-images/mmcblk2boot0.img` (Reference SPL for the USB RAM boot.)
+`reference-images/spl_0-60k.img` (Reference boot0 image used to extract ATF, TEE and the device tree, and for the boot0 comparison.) and
+`reference-images/mmcblk2boot0.img` (Reference Secondary Program Loader (SPL) for the USB RAM boot.)
 from [Gouda-percha's MEGA image folder](https://mega.nz/folder/QdsizKTQ#IPVMSXyopW1ozWQLTOQRSQ), linked from [Part 2b](https://failedattempts.neocities.org/part2b.html)
 
+### Downloading tools and repos
+Enter into the docker environment with
+```sh
+docker run -ti --rm -v $PWD:/code -v /dev:/dev lulumirror
+```
+Get the pinned version of lemonademirror with
+```sh
+sh /code/scripts/download-lemonade-release.sh
+```
+Check the two boot inputs against the hashes used in this project:
+
+```sh
+sha256sum -c /code/scripts/reference-checksum
+```
+Extract the reference boot components from the reference images with
+```sh
+python3 /code/scripts/extract-boot-components.py
+```
+Build a patched uboot image with
+```sh
+sh /code/scripts/build-uboot-baseline.sh backup-ums-direct
+```
+
+The script for packaging the shim expects[NXP imx-mkimage](https://github.com/nxp-imx/imx-mkimage) at a pinned revision, grab it with
+```sh
+git clone https://github.com/nxp-imx/imx-mkimage.git vendor/nxp-imx-mkimage
+git -C vendor/nxp-imx-mkimage checkout --detach 1b577853ae1afe1f26cdef27548da52fb424af48
+```
+TODO: CAMERA SETUP
+
+Build the shim with
+```sh
+sh /code/scripts/build-shim-experimental.sh
+```
+Package it with
+```sh
+sh /code/scripts/package-shim-experimental.sh
+```
+## License
 Original code and documentation in this repository are available under the [MIT License](LICENSE). Third-party material, including the reproduced shim source and patches to upstream projects, is excluded from that grant. See
 [license scope and third-party notices](THIRD_PARTY_NOTICES.md) for details.
 
