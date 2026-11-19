@@ -1,7 +1,0 @@
-# Pinned versions; xPack differs from the original GCC 16.2.0 build.
-[tools]
-python = "3.15.2"
-pixi = "0.84.1"
-"github:nxp-imx/mfgtools" = { version = "uuu_1.5.243", asset_pattern = "uuu_mac_arm", bin = "uuu", os = ["macos/arm64"] }
-"github:xpack-dev-tools/aarch64-none-elf-gcc-xpack" = { version = "15.2.1-1.1", asset_pattern = "*darwin-arm64.tar.gz", os = ["macos/arm64"] }
-"http:android-platform-tools" = { version = "37.0.2", url = "https://dl.google.com/android/repository/platform-tools_r37.0.2-darwin.zip", bin_path = "platform-tools", os = ["macos"] }
