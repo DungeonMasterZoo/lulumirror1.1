@@ -16,14 +16,16 @@ Docker
 Clone this repository with
 ```sh
 git clone https://github.com/DungeonMasterZoo/lulumirror1.1/
-cd lulumirror1.1```
+cd lulumirror1.1
+```
 
 Set up your docker environment with
 ```sh
 docker build . -t lulumirror
 ```
 ## Acquiring reference images
-`mkdir -p reference-images`. Then, download these files manually:
+Create a new folder called `reference-images`
+Then, download
 `reference-images/spl_0-60k.img` (Reference boot0 image used to extract ATF, TEE and the device tree, and for the boot0 comparison.)
 `reference-images/mmcblk2boot0.img` (Reference SPL for the USB RAM boot.)
 from [Gouda-percha's MEGA image folder](https://mega.nz/folder/QdsizKTQ#IPVMSXyopW1ozWQLTOQRSQ), linked from [Part 2b](https://failedattempts.neocities.org/part2b.html)
