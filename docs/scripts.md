@@ -202,4 +202,4 @@ run = "sh scripts/build-uboot-baseline.sh backup-ums"
 
 [tasks.uboot-direct-ums-build]
 description = "Build untested direct-writable-UMS U-Boot locally"
-run = "sh scripts/build-uboot-baseline.sh backup-ums-direct"
+run = "sh /code/scripts/build-uboot-baseline.sh backup-ums-direct"
