@@ -26,4 +26,4 @@ echo "Output directory: $out"
 # NXP's standalone i.MX8M packer uses system zlib and the macOS host compiler.
 cc -O2 "$src/iMX8M/mkimage_imx8.c" -o "$out/mkimage_imx8" -lz
 "$out/mkimage_imx8" -loader "$raw" 0x40000040 -out "$out/shim.imx"
-python "$root/scripts/verify-shim-imx.py" "$out/shim.imx" "$raw"
+python3 "$root/scripts/verify-shim-imx.py" "$out/shim.imx" "$raw"
