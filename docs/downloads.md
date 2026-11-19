@@ -57,7 +57,7 @@ The camera module build requires Docker and downloads the pinned Linux 6.18.60 s
 
 ## 4. Local build outputs and limitations
 
-The shim source is already in `shim/`; `sh /code/scripts/build-shim-experimental.sh` builds the raw shim, and `sh /code/scripts/package-shim-experimental.sh` packages it using the checkout above. `mise run uboot-research` and `mise run uboot-direct-ums-build` create experimental U-Boot builds. These commands create new directories in `build/` and do not send firmware to a device.
+The shim source is already in `shim/`; `sh /code/scripts/build-shim-experimental.sh` builds the raw shim, and `sh /code/scripts/package-shim-experimental.sh` packages it using the checkout above. `sh /code/scripts/build-uboot-baseline.sh research` and `sh /code/scripts/build-uboot-baseline.sh backup-ums-direct` create experimental U-Boot builds. These commands create new directories in `build/` and do not send firmware to a device.
 
 **Fresh-build blocker:** The scripts for `ums-direct-boot`, the boot0 comparison, and some camera tasks refer to exact directories from my machine, such as `build/uboot-nxp-task.LHWaKn/` and `build/shim-package.dvxmz4/`, and may also require exact binary hashes. New builds use different directory names; they are not automatically selected, and matching source versions do not guarantee identical binaries. The environment and backup scripts additionally enforce my disk's identity. Review and adapt the scripts for your hardware rather than treating the TL;DR as a tested fresh-install recipe. `--check` modes are useful for locating missing inputs, but passing them does not establish hardware safety or compatibility.
 
