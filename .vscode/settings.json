@@ -2,14 +2,12 @@
 	"files.exclude": {
 		"**/.venv": true,
 		"**/__pycache__": true,
-		"**/.pixi": true
 	},
 
 	"search.exclude": {
 		"**/.venv": true,
 		"**/.pytest_cache": true,
 		"**/__pycache__": true,
-		"**/.pixi": true
 	},
 
 	"workbench.colorCustomizations": {
