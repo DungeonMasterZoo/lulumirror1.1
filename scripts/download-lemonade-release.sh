@@ -30,4 +30,4 @@ fetch flash-mirror.py 4723625e66e830296633e33409bac86b3b4ac9604404eecede728a1eb5
 fetch mirror-boot.img cfcb3476851c87da4ac895c9e3a72f1e6f3f95fa7bb28900be80c56fe3a7a1d2
 fetch mirror-rootfs.img.xz c81fe11fbf5753c017fc1502b6a950e37212f8b16d49bf551f8fc83031c020c4
 fetch SHA256SUMS d2af475465b546db289b3c4145e014c681c4969f5236610db8f7796d308eff4d
-echo 'Release files verified against pinned SHA-256 digests. No device was contacted.'
+echo 'Release files verified against expected reference SHA sums'

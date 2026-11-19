@@ -145,7 +145,6 @@ def main():
                 output.write(data)
             action = "extracted"
         print(f"{destination}: {action}, offset={offset:#x}, size={len(data)}, sha256={hashlib.sha256(data).hexdigest()}")
-    print("These are reference-image components; compatibility with your MIRROR is not established.")
 
 
 if __name__ == "__main__":
