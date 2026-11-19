@@ -37,7 +37,7 @@ Extract the reference boot components from the reference images with `python3 /c
 
 ## 3. Third-party source checkouts
 
-`mise run uboot-direct-ums-build` automatically clones [NXP U-Boot](https://github.com/nxp-imx/uboot-imx) into `vendor/uboot-imx-android-10/` if it is absent, verifies revision `d26632454196662187c2562e404655fa88eea4cb`, and applies the project's patches. It builds experimental code locally; it does not contact the MIRROR.
+`sh /code/scripts/build-uboot-baseline.sh backup-ums-direct` automatically clones [NXP U-Boot](https://github.com/nxp-imx/uboot-imx) into `vendor/uboot-imx-android-10/` if it is absent, verifies revision `d26632454196662187c2562e404655fa88eea4cb`, and applies the project's patches. 
 
 For shim packaging, the script expects [NXP imx-mkimage](https://github.com/nxp-imx/imx-mkimage) at a pinned revision. If the destination does not already exist:
 
