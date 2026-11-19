@@ -12,12 +12,7 @@ src="$root/vendor/uboot-imx-android-10"
 patch="$root/patches/uboot-macos-image-tool-data-section.patch"
 bootpatch="$root/patches/uboot-evk-bootcommand-guard.patch"
 revision=d26632454196662187c2562e404655fa88eea4cb
-makebin="$root/.pixi/envs/default/bin/make"
 
-if [ ! -x "$makebin" ] || [ ! -x "$root/.pixi/envs/default/bin/sed" ]; then
-  echo 'Missing project-local GNU Make or sed; run mise run setup' >&2
-  exit 1
-fi
 if [ ! -e "$src" ]; then
   mkdir -p "$root/vendor"
   git clone --depth 1 --branch android-10.0.0_2.5.0 https://github.com/nxp-imx/uboot-imx.git "$src"
@@ -68,32 +63,20 @@ if [ "$mode" = backup-ums-direct ]; then
   done
 fi
 
-export PATH="$root/.pixi/envs/default/bin:$PATH"
 export SOURCE_DATE_EPOCH=1606473267
 # NXP's old Makefile recursively runs sw_vers for every macOS flag check.
 # Nested make evaluation can lose a version component, making its shell tests
 # fail. Resolve both numbers once and pass them explicitly to every sub-make.
-macos_version=$(sw_vers -productVersion)
-macos_major=${macos_version%%.*}
-macos_rest=${macos_version#*.}
-macos_minor=${macos_rest%%.*}
-case "$macos_major:$macos_minor" in
-  *[!0-9:]*|:*|*:) echo "Unexpected macOS version: $macos_version" >&2; exit 1 ;;
-esac
-if [ "$macos_rest" = "$macos_version" ]; then
-  echo "macOS version lacks a minor component: $macos_version" >&2
-  exit 1
-fi
 mkdir -p "$root/build"
 out=$(mktemp -d "$root/build/uboot-nxp-task.XXXXXX")
 echo "Build directory: $out"
 echo 'Building unverified EVK baseline locally. DO NOT send it to the MIRROR.'
-"$makebin" -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- DARWIN_MAJOR_VERSION="$macos_major" DARWIN_MINOR_VERSION="$macos_minor" imx8mm_evk_defconfig
+make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- imx8mm_evk_defconfig
 if [ "$mode" != baseline ]; then
   # These settings reduce accidental persistent changes and select fastboot at
   # startup. They do NOT make UCmd, fastboot flash, or arbitrary commands safe.
   python "$root/scripts/configure-uboot-research.py" "$out/.config" "$mode"
-  "$makebin" -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- DARWIN_MAJOR_VERSION="$macos_major" DARWIN_MINOR_VERSION="$macos_minor" olddefconfig
+  make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- olddefconfig
   bootcmd='fastboot 0'
   if [ "$mode" = backup-ums ]; then bootcmd='fastboot 0; ums 0 mmc 2'; fi
   if [ "$mode" = backup-ums-direct ]; then bootcmd='ums 0 mmc 2'; fi
@@ -104,7 +87,7 @@ if [ "$mode" != baseline ]; then
     fi
   done
 fi
-"$makebin" -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- DARWIN_MAJOR_VERSION="$macos_major" DARWIN_MINOR_VERSION="$macos_minor" -j4 u-boot.bin
+make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- -j4 u-boot.bin
 if [ "$mode" != baseline ]; then
   # The legacy board header can override the Kconfig value. Inspect the actual
   # linked default environment, not merely the requested .config setting.
