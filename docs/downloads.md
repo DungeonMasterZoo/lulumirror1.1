@@ -9,10 +9,9 @@ This is a checklist of the external files and source checkouts used in this jour
 On Apple Silicon macOS, install [mise](https://mise.jdx.dev/getting-started.html) and Apple's command-line developer tools. Review `mise.toml`, then run:
 
 ```sh
-mise trust
 mise install
-mise run setup
-mise run lemonade-download
+pixi install --locked
+sh scripts/download-lemonade-release.sh
 ```
 
 The last command downloads and verifies the pinned `v1.0-kernel-6.18.60` installer, boot image, and compressed root filesystem from [LemonadeMirror releases](https://github.com/ikiiftekhar2/lemonademirror/releases/tag/v1.0-kernel-6.18.60) into `build/lemonademirror-v1.0-kernel-6.18.60/`. It does not contact the MIRROR. Other operating systems need equivalent tools; the bundled UUU setup targets Apple Silicon macOS.
@@ -26,7 +25,7 @@ Create the destination with `mkdir -p reference-images`. Download these files ma
 | `reference-images/mmcblk2boot0.img` | [Gouda-percha's MEGA image folder](https://mega.nz/folder/QdsizKTQ#IPVMSXyopW1ozWQLTOQRSQ), linked from [Part 2b](https://failedattempts.neocities.org/part2b.html) | Reference boot0 image used to extract ATF, TEE and the device tree, and for the boot0 comparison. |
 | `reference-images/spl_0-60k.img` | SPL download linked in [Part 3a](https://failedattempts.neocities.org/part3a) | Reference SPL for the experimental USB RAM boot. Despite the name, the file is 384 KiB. |
 
-The MEGA folder also provides `mmcblk2boot1.img` and `mmcblk2.img` (the compressed user-area image), but those are not needed by the RAM-boot tasks above. My downloaded `mmcblk2rpmb.img` was a permission-denied message, not an RPMB image. None of these files is a backup of your device. Check redistribution rights and privacy before sharing them.
+The MEGA folder also provides `mmcblk2boot1.img` and `mmcblk2.img` (the compressed user-area image), but those are not needed by the RAM-boot tasks above.
 
 Check the two boot inputs against the hashes used in this project:
 
