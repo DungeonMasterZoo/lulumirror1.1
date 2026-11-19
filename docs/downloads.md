@@ -4,48 +4,6 @@ This is a checklist of the external files and source checkouts used in this jour
 
 **This is not yet a reproducible one-command installer.** Some tasks expect hashes and paths from builds on my Mac, and disk-writing scripts check my unit's partition GUIDs and layout. A hash match identifies a file, not its authenticity or compatibility with another MIRROR. Do not bypass checks to flash a different device.
 
-## 1. Reference boot images
-
-Create the destination with `mkdir -p reference-images`. Download these files manually:
-`reference-images/spl_0-60k.img` (Reference boot0 image used to extract ATF, TEE and the device tree, and for the boot0 comparison.)
-`reference-images/mmcblk2boot0.img` (Reference SPL for the experimental USB RAM boot. Despite the name, the file is 384 KiB.)
-from [Gouda-percha's MEGA image folder](https://mega.nz/folder/QdsizKTQ#IPVMSXyopW1ozWQLTOQRSQ), linked from [Part 2b](https://failedattempts.neocities.org/part2b.html)
-
-The MEGA folder also provides `mmcblk2boot1.img` and `mmcblk2.img` (the compressed user-area image), but those are not needed by the RAM-boot tasks above.
-
-## 2. Tools and LemonadeMirror release
-
-Install Docker, if you don't already have it, then run
-```sh
-docker build . -t lulumirror
-docker run -ti --rm -v $PWD:/code -v /dev:/dev lulumirror
-```
-This builds the dev environment, then the second command enters you into the shell for the dev environment.
-```sh
-sh /code/scripts/download-lemonade-release.sh
-
-```
-This downloads and verifies the pinned `v1.0-kernel-6.18.60` installer, boot image, and compressed root filesystem from [LemonadeMirror releases](https://github.com/ikiiftekhar2/lemonademirror/releases/tag/v1.0-kernel-6.18.60) into `build/lemonademirror-v1.0-kernel-6.18.60/`.
-
-Check the two boot inputs against the hashes used in this project:
-
-```sh
-sha256sum -c /code/scripts/reference-checksum
-```
-
-Extract the reference boot components from the reference images with `python3 /code/scripts/extract-boot-components.py`. `sh /code/scripts/test-reference-spl.sh --check` checks the SPL and local dependencies without contacting the device. The boot0 comparison expects this exact reference file, including its original length.
-
-## 3. Third-party source checkouts
-
-`sh /code/scripts/build-uboot-baseline.sh backup-ums-direct` automatically clones [NXP U-Boot](https://github.com/nxp-imx/uboot-imx) into `vendor/uboot-imx-android-10/` if it is absent, verifies revision `d26632454196662187c2562e404655fa88eea4cb`, and applies the project's patches.
-
-For shim packaging, the script expects [NXP imx-mkimage](https://github.com/nxp-imx/imx-mkimage) at a pinned revision. If the destination does not already exist:
-
-```sh
-git clone https://github.com/nxp-imx/imx-mkimage.git vendor/nxp-imx-mkimage
-git -C vendor/nxp-imx-mkimage checkout --detach 1b577853ae1afe1f26cdef27548da52fb424af48
-```
-
 For the camera preparation and build scripts, provide a clean [LemonadeMirror source checkout](https://github.com/ikiiftekhar2/lemonademirror) at the revision used for my camera work. If the destination does not already exist:
 
 ```sh
