@@ -4,7 +4,16 @@ This is a checklist of the external files and source checkouts used in this jour
 
 **This is not yet a reproducible one-command installer.** Some tasks expect hashes and paths from builds on my Mac, and disk-writing scripts check my unit's partition GUIDs and layout. A hash match identifies a file, not its authenticity or compatibility with another MIRROR. Do not bypass checks to flash a different device.
 
-## 1. Tools and LemonadeMirror release
+## 1. Reference boot images
+
+Create the destination with `mkdir -p reference-images`. Download these files manually:
+`reference-images/spl_0-60k.img` (Reference boot0 image used to extract ATF, TEE and the device tree, and for the boot0 comparison.)
+`reference-images/mmcblk2boot0.img` (Reference SPL for the experimental USB RAM boot. Despite the name, the file is 384 KiB.)
+from [Gouda-percha's MEGA image folder](https://mega.nz/folder/QdsizKTQ#IPVMSXyopW1ozWQLTOQRSQ), linked from [Part 2b](https://failedattempts.neocities.org/part2b.html)
+
+The MEGA folder also provides `mmcblk2boot1.img` and `mmcblk2.img` (the compressed user-area image), but those are not needed by the RAM-boot tasks above.
+
+## 2. Tools and LemonadeMirror release
 
 Install Docker, if you don't already have it, then run
 ```sh
@@ -18,24 +27,13 @@ sh /code/scripts/download-lemonade-release.sh
 ```
 This downloads and verifies the pinned `v1.0-kernel-6.18.60` installer, boot image, and compressed root filesystem from [LemonadeMirror releases](https://github.com/ikiiftekhar2/lemonademirror/releases/tag/v1.0-kernel-6.18.60) into `build/lemonademirror-v1.0-kernel-6.18.60/`.
 
-## 2. Reference boot images
-
-Create the destination with `mkdir -p reference-images`. Download these files manually:
-
-| Destination | Source | Purpose |
-| --- | --- | --- |
-| `reference-images/mmcblk2boot0.img` | [Gouda-percha's MEGA image folder](https://mega.nz/folder/QdsizKTQ#IPVMSXyopW1ozWQLTOQRSQ), linked from [Part 2b](https://failedattempts.neocities.org/part2b.html) | Reference boot0 image used to extract ATF, TEE and the device tree, and for the boot0 comparison. |
-| `reference-images/spl_0-60k.img` | SPL download linked in [Part 3a](https://failedattempts.neocities.org/part3a) | Reference SPL for the experimental USB RAM boot. Despite the name, the file is 384 KiB. |
-
-The MEGA folder also provides `mmcblk2boot1.img` and `mmcblk2.img` (the compressed user-area image), but those are not needed by the RAM-boot tasks above.
-
 Check the two boot inputs against the hashes used in this project:
 
 ```sh
-sha256sum -c scripts/reference-checksum
+sha256sum -c /code/scripts/reference-checksum
 ```
 
-Extract the reference boot components from the reference images with `python scripts/extract-boot-components.py`. `sh scripts/test-reference-spl.sh --check` checks the SPL and local dependencies without contacting the device. The boot0 comparison expects this exact reference file, including its original length.
+Extract the reference boot components from the reference images with `python3 /code/scripts/extract-boot-components.py`. `sh /code/scripts/test-reference-spl.sh --check` checks the SPL and local dependencies without contacting the device. The boot0 comparison expects this exact reference file, including its original length.
 
 ## 3. Third-party source checkouts
 
