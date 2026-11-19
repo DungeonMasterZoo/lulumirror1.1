@@ -37,12 +37,11 @@ Extract the reference boot components from the reference images with `python3 /c
 
 ## 3. Third-party source checkouts
 
-`sh /code/scripts/build-uboot-baseline.sh backup-ums-direct` automatically clones [NXP U-Boot](https://github.com/nxp-imx/uboot-imx) into `vendor/uboot-imx-android-10/` if it is absent, verifies revision `d26632454196662187c2562e404655fa88eea4cb`, and applies the project's patches. 
+`sh /code/scripts/build-uboot-baseline.sh backup-ums-direct` automatically clones [NXP U-Boot](https://github.com/nxp-imx/uboot-imx) into `vendor/uboot-imx-android-10/` if it is absent, verifies revision `d26632454196662187c2562e404655fa88eea4cb`, and applies the project's patches.
 
 For shim packaging, the script expects [NXP imx-mkimage](https://github.com/nxp-imx/imx-mkimage) at a pinned revision. If the destination does not already exist:
 
 ```sh
-mkdir -p vendor
 git clone https://github.com/nxp-imx/imx-mkimage.git vendor/nxp-imx-mkimage
 git -C vendor/nxp-imx-mkimage checkout --detach 1b577853ae1afe1f26cdef27548da52fb424af48
 ```
@@ -50,7 +49,6 @@ git -C vendor/nxp-imx-mkimage checkout --detach 1b577853ae1afe1f26cdef27548da52f
 For the camera preparation and build scripts, provide a clean [LemonadeMirror source checkout](https://github.com/ikiiftekhar2/lemonademirror) at the revision used for my camera work. If the destination does not already exist:
 
 ```sh
-mkdir -p vendor
 git clone https://github.com/ikiiftekhar2/lemonademirror.git vendor/lemonademirror
 git -C vendor/lemonademirror checkout --detach 900b4ca4c0f7152be96108bb7f4a2d15bd10c1bb
 ```
@@ -59,7 +57,7 @@ The camera module build requires Docker and downloads the pinned Linux 6.18.60 s
 
 ## 4. Local build outputs and limitations
 
-The shim source is already in `shim/`; `mise run shim-build` builds the raw shim, and `mise run shim-package` packages it using the checkout above. `mise run uboot-research` and `mise run uboot-direct-ums-build` create experimental U-Boot builds. These commands create new directories in `build/` and do not send firmware to a device.
+The shim source is already in `shim/`; `sh /code/scripts/build-shim-experimental.sh` builds the raw shim, and `mise run shim-package` packages it using the checkout above. `mise run uboot-research` and `mise run uboot-direct-ums-build` create experimental U-Boot builds. These commands create new directories in `build/` and do not send firmware to a device.
 
 **Fresh-build blocker:** The scripts for `ums-direct-boot`, the boot0 comparison, and some camera tasks refer to exact directories from my machine, such as `build/uboot-nxp-task.LHWaKn/` and `build/shim-package.dvxmz4/`, and may also require exact binary hashes. New builds use different directory names; they are not automatically selected, and matching source versions do not guarantee identical binaries. The environment and backup scripts additionally enforce my disk's identity. Review and adapt the scripts for your hardware rather than treating the TL;DR as a tested fresh-install recipe. `--check` modes are useful for locating missing inputs, but passing them does not establish hardware safety or compatibility.
 

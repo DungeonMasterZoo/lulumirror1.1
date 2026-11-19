@@ -182,7 +182,7 @@ run = "python scripts/get-shim-source.py"
 
 [tasks.shim-build]
 description = "Build the experimental raw shim locally; does not contact the device"
-run = "sh scripts/build-shim-experimental.sh"
+run = "sh /code/scripts/build-shim-experimental.sh"
 
 [tasks.shim-package]
 description = "Package and statically check the experimental shim; do not deploy"
