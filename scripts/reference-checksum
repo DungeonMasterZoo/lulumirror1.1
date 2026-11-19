@@ -1,2 +1,2 @@
-5d02ce60d2ea095fafb87bcb0b893cc81785bff738ef147220350de0deaae83e *reference-images/mmcblk2boot0.img
-2b46eb4059d59bfd60df1d8f159a27de84fbe6ca91c140b26ffe6dad7368daad *reference-images/spl_0-60k.img
+5d02ce60d2ea095fafb87bcb0b893cc81785bff738ef147220350de0deaae83e /code/reference-images/mmcblk2boot0.img
+2b46eb4059d59bfd60df1d8f159a27de84fbe6ca91c140b26ffe6dad7368daad /code/reference-images/spl_0-60k.img
