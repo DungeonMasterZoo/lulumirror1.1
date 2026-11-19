@@ -18,7 +18,7 @@ The MEGA folder also provides `mmcblk2boot1.img` and `mmcblk2.img` (the compress
 Install Docker, if you don't already have it, then run
 ```sh
 docker build . -t lulumirror
-docker run -ti --rm -v $PWD:/code lulumirror
+docker run -ti --rm -v $PWD:/code -v /dev:/dev lulumirror
 ```
 This builds the dev environment, then the second command enters you into the shell for the dev environment.
 ```sh
