@@ -5,7 +5,7 @@
 > [!WARNING]
 > This is hardware hacking. if you don't feel comfortable manually bridging pins on a circuit board, this isn't the project for you. This is open-source stuff, no implied or express warranty.
 
-This is a fork of Jmurzy's process of getting [LemonadeMirror](https://github.com/ikiiftekhar2/lemonademirror), a Debian-based system, running on a MIRROR with the original NXP i.MX8M Mini board. This version is stripped to bare essentials, and simplified where possible. The original project is run on an apple silicon mac, using Mise. For this version, I have foregone mise in favor of a more reproducable dockerfile. While  this aims to be system-agnostic, it was written from my Arch Linux PC.
+This is a fork of Jmurzy's process of getting [LemonadeMirror](https://github.com/ikiiftekhar2/lemonademirror), a Debian-based system, running on a MIRROR with the original NXP i.MX8M Mini board. This version is stripped to bare essentials, and simplified where possible. The original project is run on an apple silicon mac, using Mise. For this version, I have foregone mise in favor of a more reproducable dockerfile. While this aims to be system-agnostic, it was written from my Arch Linux PC.
 
 The original repo suggests you point an llm agent at the repo in order to give it needed context to help you. If I've done my job well, no such agent should be needed. YMMV.
 
@@ -39,14 +39,13 @@ Get the pinned version of lemonademirror with
 ```sh
 sh /code/scripts/download-lemonade-release.sh
 ```
-Check the two boot inputs against the hashes used in this project:
-
-```sh
-sha256sum -c /code/scripts/reference-checksum
-```
 Extract the reference boot components from the reference images with
 ```sh
 python3 /code/scripts/extract-boot-components.py
+```
+Checksum the reference images and boot components
+```sh
+sha256sum -c /code/bootcomponentchecksums  
 ```
 Build a patched uboot image with
 ```sh
@@ -67,7 +66,8 @@ sh /code/scripts/build-shim-experimental.sh
 Package it with
 ```sh
 sh /code/scripts/package-shim-experimental.sh
-```
+
+
 ## License
 Original code and documentation in this repository are available under the [MIT License](LICENSE). Third-party material, including the reproduced shim source and patches to upstream projects, is excluded from that grant. See
 [license scope and third-party notices](THIRD_PARTY_NOTICES.md) for details.
