@@ -1,5 +1,4 @@
 #!/bin/sh
-# Download only the pinned ready-made release; never contact the MIRROR.
 set -eu
 cd "$(dirname "$0")/.."
 root=$PWD
