@@ -9,8 +9,6 @@ This is a checklist of the external files and source checkouts used in this jour
 On Apple Silicon macOS, install [mise](https://mise.jdx.dev/getting-started.html) and Apple's command-line developer tools. Review `mise.toml`, then run:
 
 ```sh
-mise install
-pixi install --locked
 sh scripts/download-lemonade-release.sh
 ```
 
@@ -30,7 +28,7 @@ The MEGA folder also provides `mmcblk2boot1.img` and `mmcblk2.img` (the compress
 Check the two boot inputs against the hashes used in this project:
 
 ```sh
-shasum -a 256 -c scripts/reference-checksum
+sha256sum -c scripts/reference-checksum
 ```
 
 Extract the reference boot components from the reference images with `python scripts/extract-boot-components.py`. `sh scripts/test-reference-spl.sh --check` checks the SPL and local dependencies without contacting the device. The boot0 comparison expects this exact reference file, including its original length.
@@ -66,7 +64,7 @@ The shim source is already in `shim/`; `mise run shim-build` builds the raw shim
 ### Using this on another MIRROR
 
 - **Find your own build outputs:** The build commands print their output directories. To list possible U-Boot, shim, and camera artifacts afterward, run `find build -type f \( -name u-boot.bin -o -name shim.imx -o -name ov5645.ko -o -name ov5640.ko \) -print`. Identify the correct build variant from its build output; do not assume the newest file is the right one.
-- **Inspect the hash:** Run `shasum -a 256 path/to/your/file` and compare it with the relevant script's expected hash. A match identifies the same bytes as my file; it does not prove compatibility with your hardware. A different hash needs investigation, not automatic acceptance.
+- **Inspect the hash:** Run `sha256sum path/to/your/file` and compare it with the relevant script's expected hash. A match identifies the same bytes as my file; it does not prove compatibility with your hardware. A different hash needs investigation, not automatic acceptance.
 - **Find the hard-coded inputs:** Review `scripts/test-ums-uboot.sh`, `scripts/test-research-uboot.sh`, and `scripts/test-research-shim.sh` for the RAM-boot paths and hashes. `scripts/prepare-usb-boot-test.py`, `scripts/test-env-format.py`, and the camera preparation and test scripts also refer to specific build paths. The composite tasks call these scripts, so an individual missing input can stop the whole sequence.
 - **Treat disk checks separately:** `scripts/backup-mirror-user.py` checks partition GUIDs from my MIRROR; `scripts/write-usb-boot-test.py` and the flash and boot-setting scripts build on those checks and make additional assumptions about disk size, environment location, and original bytes. Your unit can differ even if the model matches.
 - **Do not blindly change or bypass checks:** Independently verify the board, boot chain, disk identity and layout, environment location, and original bytes against your own verified backup before considering changes. The write path and restoration process have not been validated for other units. Use the scripts' `--check` modes where available to inspect local prerequisites; they do not authorize a device write or prove the firmware is safe.

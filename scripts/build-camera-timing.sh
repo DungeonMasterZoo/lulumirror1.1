@@ -17,13 +17,13 @@ if [ ! -f "$source" ]; then
   trap 'rm -f "$temp"' EXIT HUP INT TERM
   echo "Command: curl -fL https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.18.60.tar.xz -o $temp"
   curl -fL https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.18.60.tar.xz -o "$temp"
-  actual=$(shasum -a 256 "$temp"); actual=${actual%% *}
+  actual=$(sha256sum "$temp"); actual=${actual%% *}
   [ "$actual" = "$expected" ] || { echo 'Linux source hash mismatch.' >&2; exit 1; }
   [ ! -e "$source" ] && [ ! -L "$source" ] || { echo 'Source appeared; refusing overwrite.' >&2; exit 1; }
   mv -n "$temp" "$source"
   trap - EXIT HUP INT TERM
 fi
-actual=$(shasum -a 256 "$source"); actual=${actual%% *}
+actual=$(sha256sum "$source"); actual=${actual%% *}
 [ "$actual" = "$expected" ] || { echo 'Linux source hash mismatch.' >&2; exit 1; }
 out=$(mktemp -d "$root/build/camera-$variant.XXXXXXXX")
 image=mirror-camera-build:linux-6.18.60

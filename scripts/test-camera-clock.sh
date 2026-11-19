@@ -14,7 +14,7 @@ case "${1:-}" in '') ;; --check) ;; *) echo 'Usage: mise run test-camera-clock [
 for entry in "$candidate:$testhash" "$recovery:$orighash"; do
   file=${entry%:*}; expected=${entry##*:}
   [ -f "$file" ] || { echo "Missing $file" >&2; exit 1; }
-  actual=$(shasum -a 256 "$file"); actual=${actual%% *}
+  actual=$(sha256sum "$file"); actual=${actual%% *}
   [ "$actual" = "$expected" ] || { echo "Hash mismatch: $file" >&2; exit 1; }
 done
 [ -f "$installer" ] || { echo 'Missing remote installer.' >&2; exit 1; }

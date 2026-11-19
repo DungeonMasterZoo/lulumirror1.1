@@ -14,13 +14,13 @@ fetch() {
     trap 'rm -f "$tmp"' EXIT HUP INT TERM
     printf 'Command: curl -fL %s/%s -o %s\n' "$base" "$name" "$tmp"
     curl -fL "$base/$name" -o "$tmp"
-    actual=$(shasum -a 256 "$tmp"); actual=${actual%% *}
+    actual=$(sha256sum "$tmp"); actual=${actual%% *}
     if [ "$actual" != "$expected" ]; then echo "SHA-256 mismatch: $name" >&2; exit 1; fi
     if [ -e "$dest" ] || [ -L "$dest" ]; then echo "Destination appeared; refusing overwrite: $dest" >&2; exit 1; fi
     mv -n "$tmp" "$dest"
     trap - EXIT HUP INT TERM
   fi
-  actual=$(shasum -a 256 "$dest"); actual=${actual%% *}
+  actual=$(sha256sum= "$dest"); actual=${actual%% *}
   if [ "$actual" != "$expected" ]; then echo "SHA-256 mismatch; refusing to overwrite: $dest" >&2; exit 1; fi
   printf 'Verified %s  %s\n' "$actual" "$dest"
 }

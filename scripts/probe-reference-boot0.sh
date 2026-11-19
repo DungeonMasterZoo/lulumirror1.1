@@ -10,7 +10,7 @@ libdir="$root/.pixi/envs/default/lib"
 case "${1:-}" in '') ;; --check) ;; *) echo 'Usage: mise run probe-reference-boot0 [--check]' >&2; exit 2 ;; esac
 [ "$#" -le 1 ] || exit 2
 [ -f "$reference" ] || { echo 'Missing reference boot0 image.' >&2; exit 1; }
-actual=$(shasum -a 256 "$reference"); actual=${actual%% *}
+actual=$(sha256sum "$reference"); actual=${actual%% *}
 [ "$actual" = "$expected" ] || { echo 'Reference image hash mismatch.' >&2; exit 1; }
 uuu=$(command -v uuu)
 for stage in test-reference-spl.sh test-reference-atf.sh test-reference-tee.sh test-research-uboot.sh test-reference-fdt.sh test-research-shim.sh jump-research-shim.sh route-uboot-output.sh; do

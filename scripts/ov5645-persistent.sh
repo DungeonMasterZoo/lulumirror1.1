@@ -13,7 +13,7 @@ recovery="$HOME/Downloads/mirror-backup/lemonademirror-original.dtb"
 if [ "$mode" = install ]; then
 for entry in "$dir/imx8mm-mirror-ov5645.dtb:ac1bb195a5b86b39f238c4ee3e6a87ade4247378b46fcf7b9e65a98d3aaf5ae8" "$dir/camhub.sh:3cdaa4534e206d79d13507a5d07f764b02ba3c881c9d92c41db97ebb124edb72" "$dir/camset.sh:b72ec805fdd6b945e7a0be725ec798bc087417a3c23bbced04b1b319527e3d2b" "$recovery:1f0702287ff95611776b89f42c665684706ed8c025a9bb42292e4deffe15dc41"; do
   file=${entry%:*}; expected=${entry##*:}; [ -f "$file" ] || { echo "Missing: $file" >&2; exit 1; }
-  actual=$(shasum -a 256 "$file"); actual=${actual%% *}; [ "$actual" = "$expected" ] || { echo "Hash mismatch: $file" >&2; exit 1; }
+  actual=$(sha256sum "$file"); actual=${actual%% *}; [ "$actual" = "$expected" ] || { echo "Hash mismatch: $file" >&2; exit 1; }
 done
 fi
 [ -f "$remote_script" ] || exit 1

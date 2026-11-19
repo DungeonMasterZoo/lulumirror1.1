@@ -20,7 +20,7 @@ case "${1:-}" in '') ;; --check) ;; *) echo 'Usage: mise run test-camera-timing 
 for item in "$testfile:$testhash" "$original:e759349fd739e2d0f3151a5836ccdef03ce93ca0e1763f493424fdd11b3a8091"; do
   file=${item%:*}; expected=${item##*:}
   [ -f "$file" ] || { echo "Missing file: $file" >&2; exit 1; }
-  actual=$(shasum -a 256 "$file"); actual=${actual%% *}
+  actual=$(sha256sum "$file"); actual=${actual%% *}
   [ "$actual" = "$expected" ] || { echo "Hash mismatch: $file" >&2; exit 1; }
 done
 [ -f "$remote_script" ] || { echo 'Missing remote script.' >&2; exit 1; }

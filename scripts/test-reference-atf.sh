@@ -11,7 +11,7 @@ expected=4c881c3e6c8936c883ba0c60a40f1c2bf3136a483e026f414da3eee1f26fc2b4
 case "${1:-}" in '') ;; --check) ;; *) echo 'Usage: mise run atf-test [--check]' >&2; exit 2 ;; esac
 if [ "$#" -gt 1 ]; then echo 'Too many arguments.' >&2; exit 2; fi
 if [ ! -f "$image" ]; then echo 'Missing reference ATF; run mise run extract.' >&2; exit 1; fi
-actual=$(shasum -a 256 "$image")
+actual=$(sha256sum "$image")
 actual=${actual%% *}
 if [ "$actual" != "$expected" ]; then echo 'Reference ATF SHA-256 mismatch; refusing to transfer.' >&2; exit 1; fi
 for library in libssl.3.dylib libcrypto.3.dylib libusb-1.0.0.dylib libzstd.1.dylib libtinyxml2.11.dylib; do

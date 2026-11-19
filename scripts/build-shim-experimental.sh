@@ -22,7 +22,7 @@ aarch64-none-elf-gcc --version | head -n 1
 echo 'Linker version:'
 aarch64-none-elf-ld --version | head -n 1
 echo 'Source hashes:'
-shasum -a 256 shim/shim.c shim/atf_common.h
+sha256sum shim/shim.c shim/atf_common.h
 
 # Address and entry point follow the guide. The xPack aarch64-none-elf tools
 # differ from the guide's aarch64-linux-gnu tools; equivalence is unverified.
@@ -31,5 +31,5 @@ aarch64-none-elf-ld build/shim-xpack/shim.o -o build/shim-xpack/shim.elf -Ttext=
 aarch64-none-elf-objcopy -O binary build/shim-xpack/shim.elf build/shim-xpack/shim.bin
 
 echo 'Output hashes:'
-shasum -a 256 build/shim-xpack/shim.o build/shim-xpack/shim.elf build/shim-xpack/shim.bin
+sha256sum build/shim-xpack/shim.o build/shim-xpack/shim.elf build/shim-xpack/shim.bin
 echo 'Experimental raw binary only. Do not send it to the device.'

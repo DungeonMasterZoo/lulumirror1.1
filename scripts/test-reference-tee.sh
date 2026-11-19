@@ -11,7 +11,7 @@ expected=ae58ee74c5ab118fa2034c263bc925172232175a907c407789b546ba9eef1c1d
 case "${1:-}" in '') ;; --check) ;; *) echo 'Usage: mise run tee-test [--check]' >&2; exit 2 ;; esac
 if [ "$#" -gt 1 ]; then echo 'Too many arguments.' >&2; exit 2; fi
 if [ ! -f "$image" ]; then echo 'Missing reference TEE; run mise run extract.' >&2; exit 1; fi
-actual=$(shasum -a 256 "$image")
+actual=$(sha256sum "$image")
 actual=${actual%% *}
 if [ "$actual" != "$expected" ]; then echo 'Reference TEE SHA-256 mismatch; refusing to transfer.' >&2; exit 1; fi
 for library in libssl.3.dylib libcrypto.3.dylib libusb-1.0.0.dylib libzstd.1.dylib libtinyxml2.11.dylib; do

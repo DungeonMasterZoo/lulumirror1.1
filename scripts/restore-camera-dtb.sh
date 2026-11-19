@@ -8,7 +8,7 @@ expected=1f0702287ff95611776b89f42c665684706ed8c025a9bb42292e4deffe15dc41
 case "${1:-}" in '') ;; --check) ;; *) echo 'Usage: mise run restore-camera-dtb [--check]' >&2; exit 2 ;; esac
 [ "$#" -le 1 ] || exit 2
 [ -f "$recovery" ] || { echo 'Local recovery DTB missing.' >&2; exit 1; }
-actual=$(shasum -a 256 "$recovery"); actual=${actual%% *}
+actual=$(sha256sum "$recovery"); actual=${actual%% *}
 [ "$actual" = "$expected" ] || { echo 'Local recovery hash mismatch.' >&2; exit 1; }
 echo 'This restores the original DTB from the verified backup on the MIRROR.'
 echo "Command: ssh $host mktemp -d /tmp/mirror-restore.XXXXXXXX"

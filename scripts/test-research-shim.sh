@@ -11,7 +11,7 @@ expected=4e29cfa5230758619fbc82a730e940dc11d85d21ebc0dcdd0f4249a1d29e2281
 case "${1:-}" in '') ;; --check) ;; *) echo 'Usage: mise run shim-test [--check]' >&2; exit 2 ;; esac
 if [ "$#" -gt 1 ]; then echo 'Too many arguments.' >&2; exit 2; fi
 if [ ! -f "$image" ]; then echo "Missing experimental shim package: $image" >&2; exit 1; fi
-actual=$(shasum -a 256 "$image")
+actual=$(sha256sum "$image")
 actual=${actual%% *}
 if [ "$actual" != "$expected" ]; then echo 'Shim SHA-256 mismatch; refusing to transfer.' >&2; exit 1; fi
 for library in libssl.3.dylib libcrypto.3.dylib libusb-1.0.0.dylib libzstd.1.dylib libtinyxml2.11.dylib; do

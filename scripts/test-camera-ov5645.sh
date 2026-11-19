@@ -11,7 +11,7 @@ case "$mode" in probe|capture) ;; *) echo 'Unexpected test mode.' >&2; exit 2 ;;
 case "${1:-}" in ''|--check) ;; *) echo 'Usage: mise run test-camera-ov5645 [--check]' >&2; exit 2 ;; esac
 [ "$#" -le 1 ] || exit 2
 [ -f "$testfile" ] && [ -f "$remote_script" ] || { echo 'Missing test artifact or script.' >&2; exit 1; }
-actual=$(shasum -a 256 "$testfile"); actual=${actual%% *}
+actual=$(sha256sum "$testfile"); actual=${actual%% *}
 [ "$actual" = "$expected" ] || { echo 'Test module hash mismatch.' >&2; exit 1; }
 echo 'This temporarily stops camhub and loads an unverified OV5645 driver to check sensor binding and topology.'
 [ "$mode" != capture ] || echo 'It also enables the media link and captures 15 frames to /dev/null; no images are saved.'

@@ -121,5 +121,5 @@ if [ "$mode" != baseline ]; then
     exit 1
   fi
 fi
-shasum -a 256 "$out/u-boot.bin"
+sha256sum "$out/u-boot.bin"
 echo 'Experimental baseline only; hardware compatibility is not established.'

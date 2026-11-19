@@ -11,7 +11,7 @@ expected=d6f8dc9aac1dcbf8fe7733f8d8b9c5fd8e7cbae56718f862c641ce2609b5e619
 case "${1:-}" in '') ;; --check) ;; *) echo 'Usage: mise run fdt-test [--check]' >&2; exit 2 ;; esac
 if [ "$#" -gt 1 ]; then echo 'Too many arguments.' >&2; exit 2; fi
 if [ ! -f "$image" ]; then echo 'Missing reference device tree; run mise run extract.' >&2; exit 1; fi
-actual=$(shasum -a 256 "$image")
+actual=$(sha256sum "$image")
 actual=${actual%% *}
 if [ "$actual" != "$expected" ]; then echo 'Reference device-tree SHA-256 mismatch; refusing to transfer.' >&2; exit 1; fi
 for library in libssl.3.dylib libcrypto.3.dylib libusb-1.0.0.dylib libzstd.1.dylib libtinyxml2.11.dylib; do
