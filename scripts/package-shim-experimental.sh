@@ -9,7 +9,7 @@ src="$root/vendor/nxp-imx-mkimage"
 raw="$root/build/shim-xpack/shim.bin"
 rev=1b577853ae1afe1f26cdef27548da52fb424af48
 if [ ! -f "$raw" ]; then
-  echo 'Missing raw shim; run mise run shim-build first.' >&2
+  echo 'Missing raw shim; run sh /code/scripts/build-shim-experimental.sh first.' >&2
   exit 1
 fi
 if [ ! -d "$src/.git" ] || [ "$(git -C "$src" rev-parse HEAD)" != "$rev" ]; then
