@@ -6,13 +6,17 @@ This is a checklist of the external files and source checkouts used in this jour
 
 ## 1. Tools and LemonadeMirror release
 
-On Apple Silicon macOS, install [mise](https://mise.jdx.dev/getting-started.html) and Apple's command-line developer tools. Review `mise.toml`, then run:
-
+Install Docker, if you don't already have it, then run
 ```sh
-sh scripts/download-lemonade-release.sh
+docker build . -t lulumirror
+docker run -ti --rm -v $PWD:/code lulumirror
 ```
+This builds the dev environment, then the second command enters you into the shell for the dev environment.
+```sh
+sh /code/scripts/download-lemonade-release.sh
 
-The last command downloads and verifies the pinned `v1.0-kernel-6.18.60` installer, boot image, and compressed root filesystem from [LemonadeMirror releases](https://github.com/ikiiftekhar2/lemonademirror/releases/tag/v1.0-kernel-6.18.60) into `build/lemonademirror-v1.0-kernel-6.18.60/`. It does not contact the MIRROR. Other operating systems need equivalent tools; the bundled UUU setup targets Apple Silicon macOS.
+```
+This downloads and verifies the pinned `v1.0-kernel-6.18.60` installer, boot image, and compressed root filesystem from [LemonadeMirror releases](https://github.com/ikiiftekhar2/lemonademirror/releases/tag/v1.0-kernel-6.18.60) into `build/lemonademirror-v1.0-kernel-6.18.60/`.
 
 ## 2. Reference boot images
 
