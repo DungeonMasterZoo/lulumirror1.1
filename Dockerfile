@@ -1,7 +1,7 @@
 FROM ubuntu:resolute
 
 RUN apt update \
- && apt install -y curl unzip python3 libusb-1.0-0
+ && apt install -y curl unzip python3 libusb-1.0-0 libtinyxml2-11 make
 
 RUN curl -L -o /usr/local/bin/uuu https://github.com/nxp-imx/mfgtools/releases/download/uuu_1.5.243/uuu-ubuntu20.04
 RUN chmod a+x /usr/local/bin/uuu
