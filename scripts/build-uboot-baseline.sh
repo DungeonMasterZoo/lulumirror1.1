@@ -75,7 +75,7 @@ make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- imx8mm_evk_defconfig
 if [ "$mode" != baseline ]; then
   # These settings reduce accidental persistent changes and select fastboot at
   # startup. They do NOT make UCmd, fastboot flash, or arbitrary commands safe.
-  python "$root/scripts/configure-uboot-research.py" "$out/.config" "$mode"
+  python3 "$root/scripts/configure-uboot-research.py" "$out/.config" "$mode"
   make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- olddefconfig
   bootcmd='fastboot 0'
   if [ "$mode" = backup-ums ]; then bootcmd='fastboot 0; ums 0 mmc 2'; fi
