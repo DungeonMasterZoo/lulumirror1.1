@@ -20,7 +20,7 @@ fetch() {
     mv -n "$tmp" "$dest"
     trap - EXIT HUP INT TERM
   fi
-  actual=$(sha256sum= "$dest"); actual=${actual%% *}
+  actual=$(sha256sum "$dest"); actual=${actual%% *}
   if [ "$actual" != "$expected" ]; then echo "SHA-256 mismatch; refusing to overwrite: $dest" >&2; exit 1; fi
   printf 'Verified %s  %s\n' "$actual" "$dest"
 }
