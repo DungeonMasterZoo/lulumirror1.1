@@ -33,7 +33,7 @@ Check the two boot inputs against the hashes used in this project:
 shasum -a 256 -c scripts/reference-checksum
 ```
 
-Extract the reference boot components from the reference images with `python scripts/extract-boot-components.py`. `mise run spl-test -- --check` checks the SPL and local dependencies without contacting the device. The boot0 comparison expects this exact reference file, including its original length.
+Extract the reference boot components from the reference images with `python scripts/extract-boot-components.py`. `sh scripts/test-reference-spl.sh --check` checks the SPL and local dependencies without contacting the device. The boot0 comparison expects this exact reference file, including its original length.
 
 ## 3. Third-party source checkouts
 
