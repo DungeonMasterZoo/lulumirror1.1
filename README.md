@@ -9,6 +9,25 @@ This is a fork of Jmurzy's process of getting [LemonadeMirror](https://github.co
 
 The original repo suggests you point an llm agent at the repo in order to give it needed context to help you. If I've done my job well, no such agent should be needed. YMMV.
 
+# Steps
+## Prerequisites
+Docker
+## Setting up your environment
+Clone this repository with
+```sh
+git clone https://github.com/DungeonMasterZoo/lulumirror1.1/
+cd lulumirror1.1```
+
+Set up your docker environment with
+```sh
+docker build . -t lulumirror
+```
+## Acquiring reference images
+`mkdir -p reference-images`. Then, download these files manually:
+`reference-images/spl_0-60k.img` (Reference boot0 image used to extract ATF, TEE and the device tree, and for the boot0 comparison.)
+`reference-images/mmcblk2boot0.img` (Reference SPL for the USB RAM boot.)
+from [Gouda-percha's MEGA image folder](https://mega.nz/folder/QdsizKTQ#IPVMSXyopW1ozWQLTOQRSQ), linked from [Part 2b](https://failedattempts.neocities.org/part2b.html)
+
 Original code and documentation in this repository are available under the [MIT License](LICENSE). Third-party material, including the reproduced shim source and patches to upstream projects, is excluded from that grant. See
 [license scope and third-party notices](THIRD_PARTY_NOTICES.md) for details.
 
