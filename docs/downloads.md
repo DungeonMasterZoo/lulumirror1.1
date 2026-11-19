@@ -30,14 +30,7 @@ The MEGA folder also provides `mmcblk2boot1.img` and `mmcblk2.img` (the compress
 Check the two boot inputs against the hashes used in this project:
 
 ```sh
-shasum -a 256 reference-images/mmcblk2boot0.img reference-images/spl_0-60k.img
-```
-
-Expected SHA-256 values for my copies:
-
-```text
-5d02ce60d2ea095fafb87bcb0b893cc81785bff738ef147220350de0deaae83e  reference-images/mmcblk2boot0.img
-2b46eb4059d59bfd60df1d8f159a27de84fbe6ca91c140b26ffe6dad7368daad  reference-images/spl_0-60k.img
+shasum -a 256 -c scripts/reference-checksum
 ```
 
 Extract the reference boot components locally with `mise run extract`. `mise run spl-test -- --check` checks the SPL and local dependencies without contacting the device. The boot0 comparison expects this exact reference file, including its original length.
