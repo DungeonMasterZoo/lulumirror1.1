@@ -4,7 +4,6 @@
 # Its fastboot flashing and MMC environment are enabled: never run on a device.
 # Host tools need a Mach-O section fix on Apple Silicon; see the adjacent patch.
 set -eu
-mode=${1:-baseline}
 cd "$(dirname "$0")/.."
 root=$PWD
 src="$root/vendor/uboot-imx-android-10"
@@ -46,21 +45,19 @@ else
   echo 'Host-tool and EVK boot-command patches are already applied.'
 fi
 
-if [ "$mode" = backup-ums-direct ]; then
-  # NXP overrides bootcmd with its USB manufacturing path in autoboot.c.
-  # Build a separate archive so this target-only experimental patch never
-  # changes the shared vendor checkout or the other U-Boot build modes.
-  mkdir -p "$root/build"
-  isolated=$(mktemp -d "$root/build/uboot-direct-source.XXXXXX")
-  git -C "$src" archive "$revision" > "$isolated/source.tar"
-  mkdir "$isolated/source"
-  tar -xf "$isolated/source.tar" -C "$isolated/source"
-  src="$isolated/source"
-  for direct_patch in "$patch" "$bootpatch" "$root/patches/uboot-direct-ums-usb-boot.patch"; do
-    patch -d "$src" -p1 --dry-run < "$direct_patch"
-    patch -d "$src" -p1 < "$direct_patch"
-  done
-fi
+# NXP overrides bootcmd with its USB manufacturing path in autoboot.c.
+# Build a separate archive so this target-only experimental patch never
+# changes the shared vendor checkout.
+mkdir -p "$root/build"
+isolated=$(mktemp -d "$root/build/uboot-direct-source.XXXXXX")
+git -C "$src" archive "$revision" > "$isolated/source.tar"
+mkdir "$isolated/source"
+tar -xf "$isolated/source.tar" -C "$isolated/source"
+src="$isolated/source"
+for direct_patch in "$patch" "$bootpatch" "$root/patches/uboot-direct-ums-usb-boot.patch"; do
+  patch -d "$src" -p1 --dry-run < "$direct_patch"
+  patch -d "$src" -p1 < "$direct_patch"
+done
 
 export SOURCE_DATE_EPOCH=1606473267
 mkdir -p "$root/build"
@@ -69,36 +66,30 @@ out="$root/build/uboot-nxp"
 mkdir -p $out
 echo "Build directory: $out"
 make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- imx8mm_evk_defconfig
-if [ "$mode" != baseline ]; then
-  # These settings reduce accidental persistent changes and select fastboot at
-  # startup. They do NOT make UCmd, fastboot flash, or arbitrary commands safe.
-  python3 "$root/scripts/configure-uboot-research.py" "$out/.config" "$mode"
-  make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- olddefconfig
-  bootcmd='fastboot 0'
-  if [ "$mode" = backup-ums ]; then bootcmd='fastboot 0; ums 0 mmc 2'; fi
-  if [ "$mode" = backup-ums-direct ]; then bootcmd='ums 0 mmc 2'; fi
-  for expected in 'CONFIG_ENV_IS_NOWHERE=y' '# CONFIG_ENV_IS_IN_MMC is not set' '# CONFIG_CMD_SAVEENV is not set' 'CONFIG_USE_BOOTCOMMAND=y' "CONFIG_BOOTCOMMAND=\"$bootcmd\"" 'CONFIG_BOOTDELAY=0' 'CONFIG_FASTBOOT_UUU_SUPPORT=y' 'CONFIG_FASTBOOT_BUF_ADDR=0x42800000' 'CONFIG_FASTBOOT_BUF_SIZE=0x800000'; do
-    if ! grep -Fqx "$expected" "$out/.config"; then
-      echo "Required research setting not retained: $expected" >&2
-      exit 1
-    fi
-  done
-fi
+# These settings reduce accidental persistent changes and select fastboot at
+# startup. They do NOT make UCmd, fastboot flash, or arbitrary commands safe.
+python3 "$root/scripts/configure-uboot-research.py" "$out/.config"
+make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- olddefconfig
+bootcmd='ums 0 mmc 2'
+for expected in 'CONFIG_ENV_IS_NOWHERE=y' '# CONFIG_ENV_IS_IN_MMC is not set' '# CONFIG_CMD_SAVEENV is not set' 'CONFIG_USE_BOOTCOMMAND=y' "CONFIG_BOOTCOMMAND=\"$bootcmd\"" 'CONFIG_BOOTDELAY=0' 'CONFIG_FASTBOOT_UUU_SUPPORT=y' 'CONFIG_FASTBOOT_BUF_ADDR=0x42800000' 'CONFIG_FASTBOOT_BUF_SIZE=0x800000'; do
+  if ! grep -Fqx "$expected" "$out/.config"; then
+    echo "Required research setting not retained: $expected" >&2
+    exit 1
+  fi
+done
 make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- -j4 u-boot.bin
-if [ "$mode" != baseline ]; then
-  # The legacy board header can override the Kconfig value. Inspect the actual
-  # linked default environment, not merely the requested .config setting.
-  if ! strings -a "$out/u-boot.bin" | grep -Fxq "bootcmd=$bootcmd"; then
-    echo "Compiled default boot command is not $bootcmd; refusing to report success." >&2
-    exit 1
-  fi
-  if [ "$mode" != research ] && ! aarch64-none-elf-nm "$out/u-boot" | grep -q ' do_usb_mass_storage$'; then
-    echo 'UMS command missing from linked image.' >&2
-    exit 1
-  fi
-  if [ "$mode" = backup-ums-direct ] && strings -a "$out/u-boot.bin" | grep -Eq 'Boot from USB for (uuu|mfgtools)|Run bootcmd_mfg:'; then
-    echo 'USB boot override strings remain in the direct UMS image.' >&2
-    exit 1
-  fi
+# The legacy board header can override the Kconfig value. Inspect the actual
+# linked default environment, not merely the requested .config setting.
+if ! strings -a "$out/u-boot.bin" | grep -Fxq "bootcmd=$bootcmd"; then
+  echo "Compiled default boot command is not $bootcmd; refusing to report success." >&2
+  exit 1
+fi
+if ! aarch64-none-elf-nm "$out/u-boot" | grep -q ' do_usb_mass_storage$'; then
+  echo 'UMS command missing from linked image.' >&2
+  exit 1
+fi
+if strings -a "$out/u-boot.bin" | grep -Eq 'Boot from USB for (uuu|mfgtools)|Run bootcmd_mfg:'; then
+  echo 'USB boot override strings remain in the direct UMS image.' >&2
+  exit 1
 fi
 sha256sum "$out/u-boot.bin"

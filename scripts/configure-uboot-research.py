@@ -10,21 +10,14 @@ import sys
 from pathlib import Path
 
 config = Path(sys.argv[1])
-mode = sys.argv[2] if len(sys.argv) > 2 else "research"
-if mode not in ("research", "backup-ums", "backup-ums-direct") or len(sys.argv) > 3:
-    raise SystemExit("Usage: configure-uboot-research.py CONFIG [research|backup-ums|backup-ums-direct]")
+if len(sys.argv) > 2:
+    raise SystemExit("Usage: configure-uboot-research.py CONFIG")
 values = {
     "ENV_IS_IN_MMC": None,
     "ENV_IS_NOWHERE": "y",
     "CMD_SAVEENV": None,
     "USE_BOOTCOMMAND": "y",
-    # In backup-ums mode, fastboot's normal cleanup runs before UMS starts.
-    # UMS is writable and this behavior is untested on the target.
-    "BOOTCOMMAND": {
-        "research": '"fastboot 0"',
-        "backup-ums": '"fastboot 0; ums 0 mmc 2"',
-        "backup-ums-direct": '"ums 0 mmc 2"',
-    }[mode],
+    "BOOTCOMMAND": '"ums 0 mmc 2"',
     "BOOTDELAY": "0",
     # End exactly at the guide's FDT address (0x43000000). This is only
     # a static overlap reduction, not proof that U-Boot leaves this RAM free.
