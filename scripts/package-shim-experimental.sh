@@ -20,10 +20,10 @@ if ! git -C "$src" diff --quiet HEAD -- iMX8M/mkimage_imx8.c; then
   exit 1
 fi
 mkdir -p "$root/build"
+rm -rf "$root/build/shim*"
 out="$root/build/shim-package"
 mkdir -p $out
 echo "Output directory: $out"
-rm -rf "$root/build/shim*"
 # NXP's standalone i.MX8M packer uses system zlib and the macOS host compiler.
 cc -O2 "$src/iMX8M/mkimage_imx8.c" -o "$out/mkimage_imx8" -lz
 "$out/mkimage_imx8" -loader "$raw" 0x40000040 -out "$out/shim.imx"

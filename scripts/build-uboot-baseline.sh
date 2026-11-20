@@ -67,9 +67,9 @@ export SOURCE_DATE_EPOCH=1606473267
 # Nested make evaluation can lose a version component, making its shell tests
 # fail. Resolve both numbers once and pass them explicitly to every sub-make.
 mkdir -p "$root/build"
+rm -rf "$root/build/uboot*"
 out="$root/build/uboot-nxp"
 mkdir -p $out
-rm -rf "$root/build/uboot*"
 echo "Build directory: $out"
 echo 'Building unverified EVK baseline locally. DO NOT send it to the MIRROR.'
 make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- imx8mm_evk_defconfig
