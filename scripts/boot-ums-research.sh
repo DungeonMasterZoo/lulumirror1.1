@@ -6,20 +6,13 @@
 set -eu
 cd "$(dirname "$0")/.."
 echo 'Starting RAM-only sequence; stop on any stage failure.'
+ls -1 /dev > /tmp/dev1
 uuu SDP: boot -f "/code/reference-images/spl_0-60k.img"
 uuu SDPV: write -f "/code/build/extracted-boot-components/atf.bin" -addr 0x00920000
 uuu SDPV: write -f "/code/build/extracted-boot-components/tee.bin" -addr 0xbe000000
-uuu SDPV: write -f "/code/build/uboot-nxp/u-boot.bin" -addr 0x40200000 
+uuu SDPV: write -f "/code/build/uboot-nxp/u-boot.bin" -addr 0x40200000
 uuu SDPV: write -f "/code/build/extracted-boot-components/fdt.dtb" -addr 0x43000000
 uuu SDPV: write -f "/code/build/shim-package/shim.imx"   -addr 0x40000000
-for stage in test-reference-tee.sh test-ums-uboot.sh test-reference-fdt.sh test-research-shim.sh jump-research-shim.sh; do
-  echo "Running $stage"
-  sh "scripts/$stage"
-done
-if [ "${MIRROR_UMS_VARIANT:-handoff}" = direct ]; then
-  echo 'Jump acknowledged. Checking current disk list; UMS may take time to appear.'
-  diskutil list
-  echo 'Share this output before selecting or copying a disk.'
-else
-  echo 'Jump acknowledged. Run mise run usb and share the output before continuing.'
-fi
+wait 5s
+ls -1 /dev > /tmp/dev2
+diff -u /tmp/dev1 /tmp/dev2
