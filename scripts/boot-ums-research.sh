@@ -15,6 +15,6 @@ uuu SDPV: write -f "/code/build/extracted-boot-components/fdt.dtb" -addr 0x43000
 uuu SDPV: write -f "/code/build/shim-package/shim.imx"   -addr 0x40000000
 wait 5s
 ls -1 /dev/disk/by-uuid/ > /tmp/dev2
-mirrordiskuuid=$(diff -u /tmp/dev1 /tmp/dev2)
+mirrordiskuuid=$(grep -xvFf /tmp/dev1 /tmp/dev2)
 echo "Your disk path is /dev/disk/by-uuid/"$mirrordiskuuid
 echo $mirrordiskuuid > /code/build/mirrordiskuuid
