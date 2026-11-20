@@ -66,8 +66,10 @@ sh /code/scripts/build-shim-experimental.sh
 Package it with
 ```sh
 sh /code/scripts/package-shim-experimental.sh
-
-
+```
+## Installation
+- **Enter download mode:** Disconnect mains power, connect the two `PROG1` pads and micro-USB, then power on. Run `adb -l`; `MX8MM SDP` should appear immediately after power-on when the pads are electrically connected. If it does not, power off and disconnect mains before checking the contacts. The pads may have solder mask, conformal coating, or oxidation that prevents contact. If a coating covers the contact points, carefully remove only enough to expose the pads. Make the connection again with power disconnected and retry; do not scrape or reposition probes on a powered board. Also check the USB **data** cable and connection if detection still fails.
+- **Expose storage:** Run `sh boot-ums-research.sh`, it should output the name of the new storage device. 
 ## License
 Original code and documentation in this repository are available under the [MIT License](LICENSE). Third-party material, including the reproduced shim source and patches to upstream projects, is excluded from that grant. See
 [license scope and third-party notices](THIRD_PARTY_NOTICES.md) for details.
