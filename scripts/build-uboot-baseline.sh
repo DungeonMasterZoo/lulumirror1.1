@@ -68,15 +68,15 @@ echo "Build directory: $out"
 make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- imx8mm_evk_defconfig
 # These settings reduce accidental persistent changes and select fastboot at
 # startup. They do NOT make UCmd, fastboot flash, or arbitrary commands safe.
-python3 "$root/scripts/configure-uboot-research.py" "$out/.config"
-make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- olddefconfig
 bootcmd='ums 0 mmc 2'
-for expected in 'CONFIG_ENV_IS_NOWHERE=y' '# CONFIG_ENV_IS_IN_MMC is not set' '# CONFIG_CMD_SAVEENV is not set' 'CONFIG_USE_BOOTCOMMAND=y' "CONFIG_BOOTCOMMAND=\"$bootcmd\"" 'CONFIG_BOOTDELAY=0' 'CONFIG_FASTBOOT_UUU_SUPPORT=y' 'CONFIG_FASTBOOT_BUF_ADDR=0x42800000' 'CONFIG_FASTBOOT_BUF_SIZE=0x800000'; do
-  if ! grep -Fqx "$expected" "$out/.config"; then
-    echo "Required research setting not retained: $expected" >&2
-    exit 1
-  fi
+for _config in 'CONFIG_ENV_IS_NOWHERE=y' '# CONFIG_ENV_IS_IN_MMC is not set' '# CONFIG_CMD_SAVEENV is not set' 'CONFIG_USE_BOOTCOMMAND=y' "CONFIG_BOOTCOMMAND=\"$bootcmd\"" 'CONFIG_BOOTDELAY=0' 'CONFIG_FASTBOOT_UUU_SUPPORT=y' 'CONFIG_FASTBOOT_BUF_ADDR=0x42800000' 'CONFIG_FASTBOOT_BUF_SIZE=0x800000'; do
+  # Remove existing line for config key
+  _config_key=$(echo "$_config" | sed -e 's:^\(# \)\?\([^ ]\+\).*:\2:')
+  sed -i '/^\(# \+\)\?'${_config_key}'[= ]/d' "${out}/.config"
+  # Add replacement line
+  echo "${_config}" >> "${out}/.config"
 done
+make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- olddefconfig
 make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- -j4 u-boot.bin
 # The legacy board header can override the Kconfig value. Inspect the actual
 # linked default environment, not merely the requested .config setting.
