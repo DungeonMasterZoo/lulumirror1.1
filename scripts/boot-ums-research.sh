@@ -9,9 +9,9 @@ echo 'Starting RAM-only sequence; stop on any stage failure.'
 uuu SDP: boot -f "/code/reference-images/spl_0-60k.img"
 uuu SDPV: write -f "/code/build/extracted-boot-components/atf.bin" -addr 0x00920000
 uuu SDPV: write -f "/code/build/extracted-boot-components/tee.bin" -addr 0xbe000000
-uuu SDPV: write -f "u-boot.bin" -addr 0x40200000  # TODO: NEW FILE PATH
+uuu SDPV: write -f "/code/build/uboot-nxp/u-boot.bin" -addr 0x40200000 
 uuu SDPV: write -f "/code/build/extracted-boot-components/fdt.dtb" -addr 0x43000000
-uuu SDPV: write -f shim.imx   -addr 0x40000000  # TODO: NEW FILE PATH
+uuu SDPV: write -f "/code/build/shim-package/shim.imx"   -addr 0x40000000
 for stage in test-reference-tee.sh test-ums-uboot.sh test-reference-fdt.sh test-research-shim.sh jump-research-shim.sh; do
   echo "Running $stage"
   sh "scripts/$stage"
