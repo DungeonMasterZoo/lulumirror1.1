@@ -63,15 +63,11 @@ if [ "$mode" = backup-ums-direct ]; then
 fi
 
 export SOURCE_DATE_EPOCH=1606473267
-# NXP's old Makefile recursively runs sw_vers for every macOS flag check.
-# Nested make evaluation can lose a version component, making its shell tests
-# fail. Resolve both numbers once and pass them explicitly to every sub-make.
 mkdir -p "$root/build"
 rm -rf "$root/build/uboot*"
 out="$root/build/uboot-nxp"
 mkdir -p $out
 echo "Build directory: $out"
-echo 'Building unverified EVK baseline locally. DO NOT send it to the MIRROR.'
 make -C "$src" O="$out" CROSS_COMPILE=aarch64-none-elf- imx8mm_evk_defconfig
 if [ "$mode" != baseline ]; then
   # These settings reduce accidental persistent changes and select fastboot at
@@ -106,4 +102,3 @@ if [ "$mode" != baseline ]; then
   fi
 fi
 sha256sum "$out/u-boot.bin"
-echo 'Experimental baseline only; hardware compatibility is not established.'
