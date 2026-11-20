@@ -16,5 +16,5 @@ uuu SDPV: write -f "/code/build/shim-package/shim.imx"   -addr 0x40000000
 wait 5s
 ls -1 /dev/disk/by-uuid/ > /tmp/dev2
 mirrordiskuuid=$(diff -u /tmp/dev1 /tmp/dev2)
-echo "Your disk path is /dev/disk/byuuid/"$mirrordiskuuid
+echo "Your disk path is /dev/disk/by-uuid/"$mirrordiskuuid
 echo $mirrordiskuuid > /code/build/mirrordiskuuid
