@@ -11,4 +11,4 @@ initrd_high=0xffffffffffffffff
 bootcmd=ums 0 mmc 2
 EOF
 /code/build/uboot-nxp/tools/mkenvimage -s 4096 -o /code/build/usb-boot-test-env.bin /tmp/config-env.txt
-dd if=build/usb-boot-test-env.bin of=/dev/disk/by-uuid/$mirrordisk bs=4096 seek=1024 count=1 conv=notrunc
+dd if=/code/build/usb-boot-test-env.bin of=/dev/disk/by-uuid/$mirrordisk bs=4096 seek=1024 count=1 conv=notrunc
