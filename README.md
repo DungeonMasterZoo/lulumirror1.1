@@ -70,7 +70,7 @@ sh /code/scripts/package-shim-experimental.sh
 ## Installation
 - **Enter download mode:** Disconnect mains power, connect the two `PROG1` pads and micro-USB, then power on. Run `uuu -lsusb`; one device should appear immediately after power-on when the pads are electrically connected. If it does not, power off and disconnect mains before checking the contacts. The pads may have solder mask, conformal coating, or oxidation that prevents contact. If a coating covers the contact points, carefully remove only enough to expose the pads. Make the connection again with power disconnected and retry; do not scrape or reposition probes on a powered board. Also check the USB **data** cable and connection if detection still fails.
 - **Expose storage:** Run `sh /code/scripts/boot-ums-research.sh`, it should output the name of the new storage device.
-- **Back up:** TODO: HANDLE BACKUP
+- **Back up:** Run `sh /code/scripts/backup.sh`, ensure you have at least 16gb free on the drive this repository is on.
 - **Test persistent USB boot:** Unmount the disk with `sh unmount-mirror.sh`. Then run `sh usb-boot-test.sh`. The command writes a persistent boot config that should allow the mirror to read via usb without the prior steps. After a successful read-back, power off, remove the PROG1 connection, power on, and use `sh update-mirror-disk.sh` to confirm the MIRROR appears as a USB disk without the RAM boot task. Recheck its disk number and unmount it before continuing.
 UNFIXED
 - **Flash:** Run `mise run flash-lemonade -- --check`, then `mise run flash-lemonade -- diskN` and follow the installer prompts. This **erases Android's `boot_b` and `userdata`**. Confirm the installer reports successful writes and read-back verification.
