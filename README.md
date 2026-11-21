@@ -33,7 +33,7 @@ from [Gouda-percha's MEGA image folder](https://mega.nz/folder/QdsizKTQ#IPVMSXyo
 ### Downloading tools and repos
 Enter into the docker environment with
 ```sh
-docker run -ti --rm -v $PWD:/code -v /dev:/dev lulumirror
+docker run --privileged -ti --rm -v $PWD:/code -v /dev:/dev lulumirror
 ```
 Get the pinned version of lemonademirror with
 ```sh
