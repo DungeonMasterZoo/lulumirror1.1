@@ -1,2 +1,3 @@
 mirrordisk=$(cat /code/build/mirrordiskuuid)
-dd if=$mirrordisk of=/code/build/mirror-backup/disk.img bs=4096
+mkdir -p /code/build/mirror-backup
+dd if=$mirrordisk of=/code/build/mirror-backup/disk.img bs=4096 status=progress
