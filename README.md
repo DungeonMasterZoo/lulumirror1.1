@@ -71,9 +71,8 @@ sh /code/scripts/package-shim-experimental.sh
 - **Expose storage:** Run `sh /code/scripts/boot-ums-research.sh`, it should output the name of the new storage device.
 - **Back up:** Run `sh /code/scripts/backup.sh`, ensure you have at least 16gb free on the drive this repository is on. This will take awhile. Likely an hour or so.
 - **Test persistent USB boot:** Do not mount the disk, if you have, use `sh /code/scripts/unmount-mirror.sh`. Then run `sh /code/scripts/usb-boot-test.sh`. The command writes a persistent boot config that should allow the mirror to read via usb without the prior steps. After a successful read-back, power off, remove the PROG1 connection, power on, and use `sh /code/scripts/update-mirror-disk.sh` to confirm the MIRROR appears as a USB disk without the repeating the previous steps.
-UNFIXED
 - **Flash:** Run `sh flash-lemonade.sh` and follow the installer prompts. This **erases Android's `boot_b` and `userdata`**. Confirm the installer reports successful writes and read-back verification.
-UNFIXED ENDS
+- **Boot Linux:** Run `sh set-lemonade-boot.sh`. After successful read-back, power-cycle and connect via SSH using the settings supplied to the installer.
 ## License
 Original code and documentation in this repository are available under the [MIT License](LICENSE). Third-party material, including the reproduced shim source and patches to upstream projects, is excluded from that grant. See
 [license scope and third-party notices](THIRD_PARTY_NOTICES.md) for details.
