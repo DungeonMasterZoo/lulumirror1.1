@@ -38,11 +38,32 @@ print("New environment SHA-256:", digest, flush=True)
 if sys.argv[1:] == ["--check"]:
     print("Local check passed. No device accessed or written.")
     raise SystemExit(0)
+if len(sys.argv) != 2 or not __import__("re").fullmatch(r"disk[0-9]+", sys.argv[1]):
+    raise SystemExit("Usage: mise run set-lemonade-boot -- diskN")
+if not sys.stdin.isatty():
+    raise SystemExit("Run interactively in your terminal.")
 disk = sys.argv[1]
+print("Command: sudo -v", flush=True)
+subprocess.run(["sudo", "-v"], check=True)
+raw = probe.validate_disk(disk)
+read = ["sudo", "-n", "/bin/dd", f"if={raw}", "bs=4096", "skip=1024", "count=1"]
+if probe.run_read(read) != test:
+    raise SystemExit("STOPPED: live environment does not match the verified USB test setting")
 print(f"Verified {disk}: MIRROR GPT and the tested USB boot environment match.")
 print("This persistently switches normal startup from USB disk mode to LemonadeMirror.")
 if input(f"Type SET LINUX BOOT {disk} to proceed: ") != f"SET LINUX BOOT {disk}":
     raise SystemExit("STOPPED: not confirmed")
-write = ["sudo", "-n", "/bin/dd", f"of={disk}", "bs=4096", "seek=1024", "count=1", "conv=notrunc"]
+probe.validate_disk(disk)
+if probe.run_read(read) != test:
+    raise SystemExit("STOPPED: environment changed before write")
+write = ["sudo", "-n", "/bin/dd", f"of={raw}", "bs=4096", "seek=1024", "count=1", "conv=notrunc"]
 print("Command: <verified 4096-byte environment on stdin> |", " ".join(write), flush=True)
+try:
+    subprocess.run(write, input=candidate, check=True)
+    if probe.run_read(read) != candidate:
+        raise RuntimeError("readback mismatch")
+except BaseException:
+    print("Write or verification failed. Do not retry or reboot; share the output.", file=sys.stderr)
+    raise
 print("Verified: LemonadeMirror boot environment read back unchanged.")
+print("Share the output before power-cycling.")
