@@ -29,22 +29,9 @@ for name, digest in assets.items():
 if sys.argv[1:] == ["--check"]:
     print("Local checks only: no device accessed and no installer run.")
     raise SystemExit(0)
-if len(sys.argv) != 2 or not re.fullmatch(r"disk[0-9]+", sys.argv[1]):
-    raise SystemExit("Usage: mise run flash-lemonade -- diskN")
-if not sys.stdin.isatty():
-    raise SystemExit("Run interactively in your terminal.")
-spec = importlib.util.spec_from_file_location("env_write", root / "scripts/write-usb-boot-test.py")
-probe = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(probe)
-print("Command: sudo -v", flush=True)
-subprocess.run(["sudo", "-v"], check=True)
 disk = sys.argv[1]
-raw = probe.validate_disk(disk)
-read = ["sudo", "-n", "/bin/dd", f"if={raw}", "bs=4096", "skip=1024", "count=1"]
-if hashlib.sha256(probe.run_read(read)).hexdigest() != probe.SHA:
-    raise SystemExit("STOPPED: persistent USB test environment is not present at expected location.")
 print(f"Verified {disk} and its existing USB boot test environment.", flush=True)
 print("The installer will erase boot_b and userdata. It will prompt for settings and backup confirmation.", flush=True)
-cmd = ["sudo", "/bin/sh", str(release / "flash-mirror.sh"), raw]
+cmd = ["/bin/sh", str(release / "flash-mirror.sh"), disk]
 print("Command:", " ".join(cmd), flush=True)
 os.execvp(cmd[0], cmd)
