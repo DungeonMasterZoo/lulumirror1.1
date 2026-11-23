@@ -7,6 +7,7 @@ set -eu
 cd "$(dirname "$0")/.."
 echo 'Starting RAM-only sequence; stop on any stage failure.'
 uuu SDP: boot -f "/code/reference-images/spl_0-60k.img"
+sleep 5s
 uuu SDPV: write -f "/code/build/extracted-boot-components/atf.bin" -addr 0x00920000
 uuu SDPV: write -f "/code/build/extracted-boot-components/tee.bin" -addr 0xbe000000
 uuu SDPV: write -f "/code/build/uboot-nxp/u-boot.bin" -addr 0x40200000
