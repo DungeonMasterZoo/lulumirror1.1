@@ -1,8 +1,5 @@
 # Repurposing a Lululemon MIRROR
 > [!WARNING]
-> This project is ongoing. Until this notice is modified, this project is not expected to function.
-
-> [!WARNING]
 > This is hardware hacking. if you don't feel comfortable manually bridging pins on a circuit board, this isn't the project for you. This is open-source stuff, no implied or express warranty.
 
 This is a fork of Jmurzy's process of getting [LemonadeMirror](https://github.com/ikiiftekhar2/lemonademirror), a Debian-based system, running on a MIRROR with the original NXP i.MX8M Mini board. This version is stripped to bare essentials, and simplified where possible. The original project is run on an apple silicon mac, using Mise. For this version, I have foregone mise in favor of a more reproducable dockerfile. While this aims to be system-agnostic, it was written from my Arch Linux PC.
